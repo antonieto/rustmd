@@ -1,5 +1,6 @@
 use lib::lexer::Lexer;
 use std::fs;
+use std::io::Write;
 use std::{env, io::Read};
 
 fn read_from_file(path: &String) -> String {
@@ -13,29 +14,47 @@ fn read_from_file(path: &String) -> String {
 }
 
 fn main() {
-    // TODO: read input and output from command line arguments
-
     let mut readme = String::new();
-
+    let mut output_path: Option<String> = None;
+    let mut output_s = String::new();
     let args: Vec<String> = env::args().collect();
 
-    match args.len() {
-        1 => {
-            std::io::stdin()
-                .read_to_string(&mut readme)
-                .expect("Failed to read from stdin");
+    if args.len() == 1 {
+        std::io::stdin()
+            .read_to_string(&mut readme)
+            .expect("Failed to read from stdin");
+    } else {
+        readme = read_from_file(&args[1]);
+
+        if args.len() > 2 {
+            output_path = Some(args[2].clone());
         }
-        2 => {
-            readme = read_from_file(&args[1]);
-        }
-        // This might cause an error
-        _ => {}
     }
 
-    let some_lexer = Lexer::new(readme.as_str());
+    let lexer = Lexer::new(readme.as_str());
 
-    for (tok, _) in some_lexer {
+    let data_file = match &output_path {
+        Some(path) => Some(
+            fs::OpenOptions::new()
+                .write(true)
+                .open(path)
+                .expect("Did not work!"),
+        ),
+        None => None,
+    };
+
+    for (tok, _) in lexer {
         let (tag, content) = tok.as_tag();
-        println!("<{}>{}</{}>", tag, content, tag);
+        let line = format!("<{}>{}<{}>\n", tag, content, tag);
+        output_s.push_str(&line);
+    }
+
+    match data_file {
+        Some(mut f) => {
+            let _ = f.write(output_s.as_bytes());
+        },
+        None => {
+            println!("{}", output_s);
+        }
     }
 }
