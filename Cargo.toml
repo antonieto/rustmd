@@ -1,0 +1,16 @@
+[package]
+name = "rustdown"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "lib"
+path = "src/lib/mod.rs"
+
+[[bin]]
+name = "rustdowncli"
+path = "src/main.rs"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[dependencies]
+plex = "0.3.1"
