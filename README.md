@@ -1,7 +1,7 @@
-# This is a heading ONE
-## This is a heading TWO
-### This is a heading THREE
+# Markdown - HTML translator
 
-This is a paragraph
+I wrote this little rust utility that allows to parse markdown files to HTML code.
+
+I will use this to build my blog eventually.
 
 
