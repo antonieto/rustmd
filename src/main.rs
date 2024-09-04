@@ -1,3 +1,4 @@
+use lib::element::{self, Element, TextElement};
 use lib::lexer::Lexer;
 use std::fs;
 use std::io::Write;
@@ -16,8 +17,8 @@ fn read_from_file(path: &String) -> String {
 fn main() {
     let mut readme = String::new();
     let mut output_path: Option<String> = None;
-    let mut output_s = String::new();
     let args: Vec<String> = env::args().collect();
+    let mut root = element::Element::Complex(element::ElementWithChildren::new("body"));
 
     if args.len() == 1 {
         std::io::stdin()
@@ -33,28 +34,25 @@ fn main() {
 
     let lexer = Lexer::new(readme.as_str());
 
-    let data_file = match &output_path {
-        Some(path) => Some(
-            fs::OpenOptions::new()
-                .write(true)
-                .open(path)
-                .expect("Did not work!"),
-        ),
-        None => None,
-    };
-
     for (tok, _) in lexer {
         let (tag, content) = tok.as_tag();
-        let line = format!("<{}>{}<{}>\n", tag, content, tag);
-        output_s.push_str(&line);
+        let text_element = TextElement::new(tag, content);
+        let element = Element::Text(text_element);
+
+        root.add_child(element);
     }
 
-    match data_file {
-        Some(mut f) => {
-            let _ = f.write(output_s.as_bytes());
-        },
-        None => {
-            println!("{}", output_s);
+    match &output_path {
+        Some(path) => {
+            let mut data_file = fs::OpenOptions::new()
+                .write(true)
+                .open(path)
+                .expect("Did not work!");
+
+            let _ = data_file.write(root.render().as_bytes());
         }
-    }
+        _ => {
+            // Print to stdout
+        }
+    };
 }
