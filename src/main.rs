@@ -52,7 +52,7 @@ fn main() {
             let _ = data_file.write(root.render().as_bytes());
         }
         _ => {
-            // Print to stdout
+            println!("{}", root.render());
         }
     };
 }
