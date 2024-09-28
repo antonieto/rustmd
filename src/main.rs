@@ -1,5 +1,5 @@
-use lexer::element::{self, Element, TextElement};
-use lexer::lexer::Lexer;
+use rustdown::element::{self, Element, TextElement};
+use rustdown::lexer::Lexer;
 use std::fs;
 use std::io::Write;
 use std::{env, io::Read};
