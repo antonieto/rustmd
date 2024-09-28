@@ -4,8 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [lib]
-name = "lib"
-path = "src/lib/mod.rs"
+name = "lexer"
+path = "src/lexer/mod.rs"
 
 [[bin]]
 name = "rustdowncli"

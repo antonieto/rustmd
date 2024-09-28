@@ -1,5 +1,5 @@
-use lib::element::{self, Element, TextElement};
-use lib::lexer::Lexer;
+use lexer::element::{self, Element, TextElement};
+use lexer::lexer::Lexer;
 use std::fs;
 use std::io::Write;
 use std::{env, io::Read};
