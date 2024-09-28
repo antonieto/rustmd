@@ -13,6 +13,9 @@ fn read_from_file(path: &String) -> String {
         Ok(content) => content,
     }
 }
+pub fn cheese() {
+    println!("Cheese!");
+}
 
 fn main() {
     let mut readme = String::new();
